@@ -42,18 +42,14 @@ export default function App() {
 
   const t = translations[currentLang];
 
-  // 1. Initial State Load from LocalStorage
+  // 1. Load CMS data from Prisma API
   useEffect(() => {
-    const savedCMS = localStorage.getItem("iliaseul_cms_data");
-    if (savedCMS) {
-      try {
-        setCmsData(JSON.parse(savedCMS));
-      } catch (err) {
-        console.error("Error loading CMS data from localstorage", err);
-      }
-    } else {
-      localStorage.setItem("iliaseul_cms_data", JSON.stringify(defaultCMSData));
-    }
+    fetch("/api/cms")
+      .then((r) => r.json())
+      .then((data: CMSData) => setCmsData(data))
+      .catch((err) =>
+        console.error("Failed to load CMS from API, using defaults", err),
+      );
 
     const savedLang = localStorage.getItem("iliaseul_lang") as Language;
     if (savedLang === "ge" || savedLang === "en") {
@@ -80,14 +76,22 @@ export default function App() {
     localStorage.setItem("iliaseul_lang", lang);
   };
 
-  // 4. Save and Update CMS Data
-  const handleUpdateCMSData = (newData: CMSData) => {
+  // 4. Save and Update CMS Data via API
+  const handleUpdateCMSData = async (newData: CMSData) => {
     setCmsData(newData);
-    localStorage.setItem("iliaseul_cms_data", JSON.stringify(newData));
+    try {
+      await fetch("/api/cms", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newData),
+      });
+    } catch (err) {
+      console.error("Failed to save CMS data", err);
+    }
   };
 
-  // 5. Submit Booking Request
-  const handleBookingRequest = (
+  // 5. Submit Booking Request via API
+  const handleBookingRequest = async (
     bookingDetails: Omit<Booking, "id" | "createdAt" | "status">,
   ) => {
     const newBooking: Booking = {
@@ -96,12 +100,22 @@ export default function App() {
       createdAt: new Date().toISOString(),
       status: "Pending",
     };
-
-    const updatedBookings = [newBooking, ...cmsData.bookings];
-    handleUpdateCMSData({
-      ...cmsData,
-      bookings: updatedBookings,
-    });
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newBooking),
+      });
+      const saved: Booking = await res.json();
+      setCmsData((prev) => ({ ...prev, bookings: [saved, ...prev.bookings] }));
+    } catch (err) {
+      console.error("Failed to create booking", err);
+      // Fallback: update local state anyway
+      setCmsData((prev) => ({
+        ...prev,
+        bookings: [newBooking, ...prev.bookings],
+      }));
+    }
   };
 
   // 6. Smooth Scroll navigation helper
