@@ -1,0 +1,6 @@
+{
+  "name": "Iliaseul Cottage Rental",
+  "description": "Experience premium peaceful hillside living in our luxury wooden cottages surrounded by forests and mountain views in Erge Village, Georgia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
