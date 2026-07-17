@@ -12,6 +12,7 @@ import {
   Mail,
   CheckCircle2,
 } from "lucide-react";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 
 import { Language, CMSData, Booking } from "./types";
 import { defaultCMSData } from "./defaultData";
@@ -240,7 +241,16 @@ export default function App() {
           }}
         />
       </div>
-
+      <FloatingWhatsApp
+        phoneNumber="995557666363"
+        accountName="Iliaseuli Cottage"
+        avatar="../assets/images.jpeg"
+        chatMessage={
+          currentLang === "ge"
+            ? "გამარჯობა! რით შემიძლია დაგეხმაროთ?"
+            : "Hello! How can I help you?"
+        }
+      />
       {/* Vertical Design Accents */}
       <div className="fixed top-0 left-0 w-[1px] h-full bg-amber-500/20 z-30 pointer-events-none hidden md:block" />
       <div className="fixed top-1/2 left-0 w-10 h-[1px] bg-amber-500/30 z-30 pointer-events-none hidden md:block" />
