@@ -80,9 +80,7 @@ export default function App() {
 
     document.title =
       titleText ||
-      (isGeorgian
-        ? "ილიასეული • კოტეჯები ერგეში"
-        : "Iliaseul Cottage Resort");
+      (isGeorgian ? "ილიასეული • კოტეჯები ერგეში" : "Iliaseul Cottage Resort");
 
     setMetaContent(
       'meta[name="description"]',
