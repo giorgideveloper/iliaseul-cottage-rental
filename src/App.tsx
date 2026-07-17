@@ -17,6 +17,7 @@ import { FloatingWhatsApp } from "react-floating-whatsapp";
 import { Language, CMSData, Booking } from "./types";
 import { defaultCMSData } from "./defaultData";
 import { translations } from "./translations";
+import image from "../assets/images.jpeg";
 
 // Subcomponents
 import Navbar from "./components/Navbar";
@@ -244,7 +245,7 @@ export default function App() {
       <FloatingWhatsApp
         phoneNumber="995557666363"
         accountName="Iliaseuli Cottage"
-        avatar="../assets/images.jpeg"
+        avatar={image}
         chatMessage={
           currentLang === "ge"
             ? "გამარჯობა! რით შემიძლია დაგეხმაროთ?"
