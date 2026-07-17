@@ -1,13 +1,14 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import path from "path";
-import fs from "fs";
 import { fileURLToPath } from "url";
-import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "../generated/prisma";
+import { PrismaPg } from "@prisma/adapter-pg";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
 import type {
   CMSData,
   Cottage,
@@ -21,19 +22,17 @@ const JWT_SECRET = process.env.JWT_SECRET || "iliaseul-super-secret-2026";
 const JWT_EXPIRES = "7d";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const UPLOADS_DIR = path.resolve(__dirname, "../public/uploads");
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 
-// Multer — save to public/uploads, keep original extension
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`);
-  },
+// Cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+// Multer — memory storage (Cloudinary-სთვის)
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
   fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith("image/")) cb(null, true);
@@ -41,18 +40,13 @@ const upload = multer({
   },
 });
 
-const adapter = new PrismaBetterSqlite3({
-  url: `file:${path.resolve(__dirname, "../prisma/iliaseul.db")}`,
-});
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 const app = express();
 const PORT = 4000;
 
 app.use(cors());
 app.use(express.json());
-
-// Serve uploaded files statically
-app.use("/uploads", express.static(UPLOADS_DIR));
 
 // ─── Helpers: convert DB rows → TypeScript types ─────────────────────────────
 
@@ -164,10 +158,24 @@ app.get("/api/auth/me", requireAuth, (req: any, res) => {
 });
 
 // ─── POST /api/upload — upload image file (protected) ────────────────────────
-app.post("/api/upload", requireAuth, upload.single("file"), (req: any, res) => {
+app.post("/api/upload", requireAuth, upload.single("file"), async (req: any, res) => {
   if (!req.file) return res.status(400).json({ error: "No file provided" });
-  const url = `/uploads/${req.file.filename}`;
-  res.json({ url });
+  try {
+    const result = await new Promise<any>((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "iliaseul" },
+        (error, result) => {
+          if (error || !result) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(req.file!.buffer);
+    });
+    res.json({ url: result.secure_url });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Upload failed" });
+  }
 });
 
 // ─── GET /api/cms — returns full CMSData ─────────────────────────────────────

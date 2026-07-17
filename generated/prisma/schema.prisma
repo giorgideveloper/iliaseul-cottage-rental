@@ -1,0 +1,78 @@
+// Iliaseul Cottage – Prisma Schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Cottage {
+  id           String @id
+  nameGe       String
+  nameEn       String
+  descGe       String
+  descEn       String
+  price        Float
+  guests       Int
+  bedrooms     Int
+  bathrooms    Int
+  amenities    String // JSON array
+  images       String // JSON array
+  availability String // JSON array of {from,to}
+}
+
+model Booking {
+  id            String  @id
+  cottageId     String
+  checkIn       String
+  checkOut      String
+  guests        Int
+  customerName  String
+  customerEmail String
+  customerPhone String
+  customerNotes String?
+  status        String  @default("Pending")
+  totalPrice    Float
+  createdAt     String
+}
+
+model Review {
+  id         String @id
+  authorName String
+  rating     Int
+  textGe     String
+  textEn     String
+  date       String
+}
+
+model FAQItem {
+  id         String @id
+  questionGe String
+  questionEn String
+  answerGe   String
+  answerEn   String
+}
+
+model GalleryItem {
+  id       String @id
+  url      String
+  category String
+  titleGe  String
+  titleEn  String
+}
+
+// Stores ContactSettings, WebSettings, ContentTexts as JSON blobs
+model Settings {
+  key   String @id
+  value String // JSON
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}

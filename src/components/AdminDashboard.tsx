@@ -1150,7 +1150,11 @@ export default function AdminDashboard({
                     {/* Upload new image for cottage */}
                     <div className="mt-3 p-3 bg-stone-950/60 border border-stone-800 rounded-xl">
                       <ImageUploader
-                        label={currentLang === "ge" ? "ახალი სურათის ატვირთვა" : "Upload new image"}
+                        label={
+                          currentLang === "ge"
+                            ? "ახალი სურათის ატვირთვა"
+                            : "Upload new image"
+                        }
                         compact
                         onImageReady={(url) =>
                           setEditingCottage({
@@ -1579,7 +1583,9 @@ export default function AdminDashboard({
                 {/* Upload panel */}
                 <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 lg:col-span-1 space-y-5">
                   <h3 className="font-serif text-base font-bold text-amber-300">
-                    {currentLang === "ge" ? "სურათის დამატება" : "Add New Image"}
+                    {currentLang === "ge"
+                      ? "სურათის დამატება"
+                      : "Add New Image"}
                   </h3>
 
                   <ImageUploader
