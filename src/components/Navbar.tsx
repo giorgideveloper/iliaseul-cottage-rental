@@ -140,13 +140,13 @@ export default function Navbar({
             </button>
 
             {/* Admin Button */}
-            <button
+            {/* <button
               onClick={onAdminClick}
               className="p-1.5 rounded-md bg-stone-800 text-amber-400 border border-stone-700"
               title="Admin Portal"
             >
               <User size={16} />
-            </button>
+            </button> */}
 
             <button
               onClick={() => setIsOpen(!isOpen)}
