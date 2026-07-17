@@ -349,6 +349,27 @@ app.post("/api/bookings", async (req, res) => {
         createdAt: b.createdAt,
       },
     });
+
+    // Silent WhatsApp notification via CallMeBot
+    const apiKey = process.env.CALLMEBOT_APIKEY;
+    const phone = process.env.WHATSAPP_NOTIFY_PHONE || "995557666363";
+    if (apiKey) {
+      const msg = encodeURIComponent(
+        `🏡 ახალი ჯავშანი\n` +
+          `📌 კოტეჯი ID: ${b.cottageId}\n` +
+          `📅 შესვლა: ${b.checkIn}\n` +
+          `📅 გასვლა: ${b.checkOut}\n` +
+          `🌙 ჯამი: ${b.totalPrice} ₾\n` +
+          `👥 სტუმრები: ${b.guests}\n` +
+          `👤 ${b.customerName}\n` +
+          `📞 ${b.customerPhone}` +
+          (b.customerNotes ? `\n📝 ${b.customerNotes}` : ""),
+      );
+      fetch(
+        `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${msg}&apikey=${apiKey}`,
+      ).catch((err) => console.error("WhatsApp notify failed:", err));
+    }
+
     res.status(201).json(dbBooking(created));
   } catch (err) {
     console.error(err);

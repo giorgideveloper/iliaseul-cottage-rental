@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap");
 @import "tailwindcss";
 
 html {
@@ -11,31 +11,31 @@ html {
   --font-serif: "Playfair Display", Georgia, serif;
 
   /* Immersive Forest Theme Backgrounds & Slate */
-  --color-stone-50: #F3F6F4;
-  --color-stone-100: #E2E9E5;
-  --color-stone-200: #C4D3CB;
-  --color-stone-300: #A2B7AD;
-  --color-stone-400: #7C9486;
-  --color-stone-500: #5C7668;
-  --color-stone-600: #495E52;
-  --color-stone-700: #3C4E43;
-  --color-stone-800: #1D3126; /* Mid forest green */
-  --color-stone-850: #14241B; /* Darker forest green */
-  --color-stone-900: #0F1A14; /* Deep forest green */
-  --color-stone-950: #090F0B; /* Deepest forest black */
+  --color-stone-50: #f3f6f4;
+  --color-stone-100: #e2e9e5;
+  --color-stone-200: #c4d3cb;
+  --color-stone-300: #a2b7ad;
+  --color-stone-400: #7c9486;
+  --color-stone-500: #5c7668;
+  --color-stone-600: #495e52;
+  --color-stone-700: #3c4e43;
+  --color-stone-800: #1d3126; /* Mid forest green */
+  --color-stone-850: #14241b; /* Darker forest green */
+  --color-stone-900: #0f1a14; /* Deep forest green */
+  --color-stone-950: #090f0b; /* Deepest forest black */
 
   /* Wood & Gold Accents */
-  --color-amber-50: #FAF8F4;
-  --color-amber-100: #F3ECE0;
-  --color-amber-200: #E6DCBD;
-  --color-amber-300: #D6C492;
-  --color-amber-400: #C9AD66;
-  --color-amber-500: #C5A059; /* Premium luxury wood accent */
-  --color-amber-600: #A88341;
-  --color-amber-700: #88652F;
-  --color-amber-800: #6D4E24;
-  --color-amber-900: #583F1D;
-  --color-amber-950: #32210E;
+  --color-amber-50: #faf8f4;
+  --color-amber-100: #f3ece0;
+  --color-amber-200: #e6dcbd;
+  --color-amber-300: #d6c492;
+  --color-amber-400: #c9ad66;
+  --color-amber-500: #c5a059; /* Premium luxury wood accent */
+  --color-amber-600: #a88341;
+  --color-amber-700: #88652f;
+  --color-amber-800: #6d4e24;
+  --color-amber-900: #583f1d;
+  --color-amber-950: #32210e;
 
   /* Custom Glows */
   --shadow-admin: 0 0 25px rgba(197, 160, 89, 0.15);
@@ -61,15 +61,15 @@ html {
 }
 
 .forest-gradient {
-  background: linear-gradient(135deg, #1D3126 0%, #0F1A14 100%);
+  background: linear-gradient(135deg, #1d3126 0%, #0f1a14 100%);
 }
 
 .accent-wood {
-  color: #C5A059;
+  color: #c5a059;
 }
 
 .bg-accent-wood {
-  background-color: #C5A059;
+  background-color: #c5a059;
 }
 
 .admin-glow {
@@ -78,4 +78,22 @@ html {
 
 .mask-edge {
   mask-image: linear-gradient(to right, black 80%, transparent 100%);
+}
+
+/* Date picker dark theme styling */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(1) saturate(3) hue-rotate(5deg) brightness(0.9);
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  transition: opacity 0.2s;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }

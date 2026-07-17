@@ -124,8 +124,9 @@ export default function Hero({
           {/* Explore (Glassmorphic look) */}
           <button
             onClick={onExploreClick}
-            className="w-full sm:w-auto px-10 py-4 glass text-white font-bold uppercase tracking-widest text-xs rounded-sm transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto px-10 py-4 glass text-white font-bold uppercase tracking-widest text-xs rounded-sm transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95 flex items-center justify-center space-x-2"
           >
+            {/* <img src="/assets/fb.svg.webp" alt="" className="w-6 h-6" />{" "} */}
             {exploreBtnText}
           </button>
         </motion.div>
