@@ -42,6 +42,13 @@ export default function App() {
 
   const t = translations[currentLang];
 
+  const setMetaContent = (selector: string, content: string) => {
+    const element = document.querySelector(selector);
+    if (element) {
+      element.setAttribute("content", content);
+    }
+  };
+
   // 1. Load CMS data from Prisma API
   useEffect(() => {
     fetch("/api/cms")
@@ -57,17 +64,62 @@ export default function App() {
     }
   }, []);
 
-  // 2. SEO Meta Title update in Browser Title Tab
+  // 2. SEO meta + html lang sync
   useEffect(() => {
-    const titleText =
-      currentLang === "ge"
-        ? cmsData.webSettings.metaTitleGe
-        : cmsData.webSettings.metaTitleEn;
+    const isGeorgian = currentLang === "ge";
+    const langCode = isGeorgian ? "ka" : "en";
+
+    const titleText = isGeorgian
+      ? cmsData.webSettings.metaTitleGe
+      : cmsData.webSettings.metaTitleEn;
+    const descriptionText = isGeorgian
+      ? cmsData.webSettings.metaDescriptionGe
+      : cmsData.webSettings.metaDescriptionEn;
+
+    document.documentElement.lang = langCode;
+
     document.title =
       titleText ||
-      (currentLang === "ge"
+      (isGeorgian
         ? "ილიასეული • კოტეჯები ერგეში"
         : "Iliaseul Cottage Resort");
+
+    setMetaContent(
+      'meta[name="description"]',
+      descriptionText ||
+        (isGeorgian
+          ? "დასვენება ერგეში, აჭარაში. პრემიუმ კოტეჯები ტყისა და მთის ხედებით."
+          : "Luxury cottages in Erge, Georgia with mountain and forest views."),
+    );
+
+    setMetaContent(
+      'meta[name="keywords"]',
+      isGeorgian
+        ? "კოტეჯი,კოტეჯები,ილიასეული,დასვენება აჭარაში,კოტეჯი ერგეში"
+        : "cottages georgia,iliaseul,erge cottage,mountain cottage,forest cottage",
+    );
+
+    setMetaContent('meta[property="og:title"]', document.title);
+    setMetaContent(
+      'meta[property="og:description"]',
+      descriptionText ||
+        (isGeorgian
+          ? "პრემიუმ კოტეჯები ერგეში, აჭარაში."
+          : "Premium cottages in Erge, Adjara."),
+    );
+    setMetaContent(
+      'meta[property="og:locale"]',
+      isGeorgian ? "ka_GE" : "en_US",
+    );
+
+    setMetaContent('meta[name="twitter:title"]', document.title);
+    setMetaContent(
+      'meta[name="twitter:description"]',
+      descriptionText ||
+        (isGeorgian
+          ? "ლუქს კოტეჯები ბუნებაში, საქართველოში."
+          : "Luxury cottages in nature, Georgia."),
+    );
   }, [currentLang, cmsData]);
 
   // 3. Save Language preference
