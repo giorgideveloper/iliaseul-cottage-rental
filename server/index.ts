@@ -43,7 +43,7 @@ const upload = multer({
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 const app = express();
-const PORT = 4000;
+const PORT = Number(process.env.PORT) || 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -158,25 +158,30 @@ app.get("/api/auth/me", requireAuth, (req: any, res) => {
 });
 
 // ─── POST /api/upload — upload image file (protected) ────────────────────────
-app.post("/api/upload", requireAuth, upload.single("file"), async (req: any, res) => {
-  if (!req.file) return res.status(400).json({ error: "No file provided" });
-  try {
-    const result = await new Promise<any>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "iliaseul" },
-        (error, result) => {
-          if (error || !result) reject(error);
-          else resolve(result);
-        }
-      );
-      stream.end(req.file!.buffer);
-    });
-    res.json({ url: result.secure_url });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Upload failed" });
-  }
-});
+app.post(
+  "/api/upload",
+  requireAuth,
+  upload.single("file"),
+  async (req: any, res) => {
+    if (!req.file) return res.status(400).json({ error: "No file provided" });
+    try {
+      const result = await new Promise<any>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "iliaseul" },
+          (error, result) => {
+            if (error || !result) reject(error);
+            else resolve(result);
+          },
+        );
+        stream.end(req.file!.buffer);
+      });
+      res.json({ url: result.secure_url });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Upload failed" });
+    }
+  },
+);
 
 // ─── GET /api/cms — returns full CMSData ─────────────────────────────────────
 app.get("/api/cms", async (_req, res) => {
