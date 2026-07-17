@@ -112,7 +112,7 @@ export default function Navbar({
               </button>
             </div>
 
-            {/* Admin Switcher */}
+            {/* Admin Switcher
             <button
               onClick={onAdminClick}
               className={`flex items-center space-x-1.5 px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-200 border ${
@@ -123,7 +123,7 @@ export default function Navbar({
             >
               <User size={14} />
               <span>{isAdmin ? t.navAdmin : t.navAdmin}</span>
-            </button>
+            </button> */}
           </div>
 
           {/* Mobile menu button */}
