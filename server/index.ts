@@ -350,11 +350,11 @@ app.post("/api/bookings", async (req, res) => {
       },
     });
 
-    // Silent WhatsApp notification via CallMeBot
-    const apiKey = process.env.CALLMEBOT_APIKEY;
-    const phone = process.env.WHATSAPP_NOTIFY_PHONE || "995557666363";
-    if (apiKey) {
-      const msg = encodeURIComponent(
+    // Silent Telegram notification
+    const tgToken = process.env.TELEGRAM_BOT_TOKEN;
+    const tgChatId = process.env.TELEGRAM_CHAT_ID;
+    if (tgToken && tgChatId) {
+      const text = encodeURIComponent(
         `🏡 ახალი ჯავშანი\n` +
           `📌 კოტეჯი ID: ${b.cottageId}\n` +
           `📅 შესვლა: ${b.checkIn}\n` +
@@ -366,8 +366,8 @@ app.post("/api/bookings", async (req, res) => {
           (b.customerNotes ? `\n📝 ${b.customerNotes}` : ""),
       );
       fetch(
-        `https://api.callmebot.com/whatsapp.php?phone=${phone}&text=${msg}&apikey=${apiKey}`,
-      ).catch((err) => console.error("WhatsApp notify failed:", err));
+        `https://api.telegram.org/${tgToken}/sendMessage?chat_id=${tgChatId}&text=${text}`,
+      ).catch((err) => console.error("Telegram notify failed:", err));
     }
 
     res.status(201).json(dbBooking(created));
