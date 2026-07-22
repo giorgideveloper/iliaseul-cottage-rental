@@ -258,7 +258,7 @@ export const defaultCMSData: CMSData = {
   ],
   contact: {
     phone: "+995 599 88 88 88",
-    email: "info@iliaseul.ge",
+    email: "info@iliaseuli.com",
     whatsapp: "https://wa.me/995599888888",
     facebook: "https://facebook.com/iliaseul.erge",
     instagram: "https://instagram.com/iliaseul.cottages",

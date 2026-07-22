@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://iliaseul.ge/sitemap.xml
+Sitemap: https://iliaseuli.com/sitemap.xml

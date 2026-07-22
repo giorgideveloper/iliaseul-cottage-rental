@@ -343,7 +343,7 @@ export default function AdminDashboard({
               </label>
               <input
                 type="email"
-                placeholder="admin@iliaseul.ge"
+                placeholder="admin@iliaseuli.com"
                 className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-amber-400"
                 required
               />
@@ -1901,7 +1901,7 @@ export default function AdminDashboard({
 
                     <div className="bg-white p-5 rounded-xl text-stone-900 font-sans shadow-inner">
                       <div className="flex items-center space-x-1.5 text-xs text-stone-500 mb-1 leading-none font-mono">
-                        <span>https://iliaseul.ge</span>
+                        <span>https://iliaseuli.com</span>
                         <span>›</span>
                         <span>
                           {currentLang === "ge" ? "კოტეჯები" : "cabins"}
