@@ -243,7 +243,7 @@ export default function App() {
         />
       </div>
       <FloatingWhatsApp
-        phoneNumber="995557666363"
+        phoneNumber="995599363107"
         accountName="Iliaseuli Cottage"
         avatar={image}
         chatMessage={
